@@ -30,19 +30,63 @@ def input_float(message):
 
 
 def display_staff(staff_list):
-    print("\nID | Name | Age | Role | Base Salary | Extra | Total Salary")
-    print("-" * 75)
+    print()
+    print(
+        f"{'ID':<5}"
+        f"{'Name':<22}"
+        f"{'Age':<8}"
+        f"{'Role':<15}"
+        f"{'Base Salary':<18}"
+        f"{'Extra':<18}"
+        f"{'Total Salary':<18}"
+    )
+    print("-" * 104)
+
+    if not staff_list:
+        print("No staff found.")
+        return
 
     for staff in staff_list:
-        print(f"{staff[0]} | {staff[1]} | {staff[2]} | {staff[3]} | {staff[4]} | {staff[5]} | {staff[6]}")
+        print(
+            f"{staff[0]:<5}"
+            f"{staff[1]:<22}"
+            f"{staff[2]:<8}"
+            f"{staff[3]:<15}"
+            f"{staff[4]:<18,.0f}"
+            f"{staff[5]:<18,.0f}"
+            f"{staff[6]:<18,.0f}"
+        )
 
 
 def display_patients(patient_list):
-    print("\nID | Name | Age | Disease | Days | Daily Fee | Medicine Fee | Total Fee")
-    print("-" * 90)
+    print()
+    print(
+        f"{'ID':<5}"
+        f"{'Name':<22}"
+        f"{'Age':<8}"
+        f"{'Disease':<18}"
+        f"{'Days':<8}"
+        f"{'Daily Fee':<18}"
+        f"{'Medicine Fee':<18}"
+        f"{'Total Fee':<18}"
+    )
+    print("-" * 115)
+
+    if not patient_list:
+        print("No patient found.")
+        return
 
     for patient in patient_list:
-        print(f"{patient[0]} | {patient[1]} | {patient[2]} | {patient[3]} | {patient[4]} | {patient[5]} | {patient[6]} | {patient[7]}")
+        print(
+            f"{patient[0]:<5}"
+            f"{patient[1]:<22}"
+            f"{patient[2]:<8}"
+            f"{patient[3]:<18}"
+            f"{patient[4]:<8}"
+            f"{patient[5]:<18,.0f}"
+            f"{patient[6]:<18,.0f}"
+            f"{patient[7]:<18,.0f}"
+        )
 
 
 def staff_menu():
