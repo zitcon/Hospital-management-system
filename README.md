@@ -1,264 +1,230 @@
-# Hospital / Clinic Management System
-
-## Project Information
-
-**Project Title:** Hospital / Clinic Management System
-
-**Course:** Programming Methods
-
-**Student:** Nguyễn Võ Yên Khanh
-
-**University:** Hue University of Education
-
-**Faculty:** Faculty of Informatics
-
-**Programming Language:** Python
-
-**Database:** SQLite
-
-**Version Control:** Git & GitHub
+# HOSPITAL / CLINIC MANAGEMENT SYSTEM
 
 ---
 
 # 1. Project Description
 
-The Hospital / Clinic Management System is a Python-based application developed using Object-Oriented Programming (OOP) principles and Layered Architecture.
+This project is a Python console application developed using **Object-Oriented Programming (OOP)** principles and **SQLite Database**.
 
-The system helps manage hospital staff and patients efficiently. It supports staff salary calculation, patient hospital fee calculation, CRUD operations, searching, sorting, and permanent data storage using SQLite database.
+The system is designed to help hospitals or clinics manage staff information, patient records, salary calculations, hospital fee calculations, and reporting activities through a Command Line Interface (CLI).
 
-The project demonstrates the practical application of OOP concepts including Encapsulation, Inheritance, Polymorphism, and Abstraction.
+The application supports:
 
----
-
-# 2. Main Features
-
-## Staff Management
-
-Manage three types of staff:
-
-* Doctor
-* Nurse
-* Administrative Staff
-
-Functions:
-
-* Add staff
-* View staff list
-* Update staff information
-* Delete staff
-* Search staff by name or role
-* Sort staff by total salary
+* Staff Management
+* Patient Management
+* Search and Sort Operations
+* Salary Calculation
+* Hospital Fee Calculation
+* Statistics and Reports
+* CSV Report Export
+* SQLite Database Storage
 
 ---
 
-## Patient Management
+# 2. Project Objective
 
-Functions:
+The objectives of this project are:
 
-* Add patient
-* View patient list
-* Update patient information
-* Delete patient
-* Search patient by name or disease
-* Sort patients by hospital fee
-
----
-
-## Salary Calculation
-
-The system automatically calculates staff salaries based on:
-
-### Doctor
-
-Total Salary = Base Salary + Bonus
-
-### Nurse
-
-Total Salary = Base Salary + Overtime Pay
-
-### Administrative Staff
-
-Total Salary = Base Salary + Allowance
+* Practice Object-Oriented Programming concepts
+* Apply Layered Architecture design
+* Manage hospital staff efficiently
+* Manage patient treatment records
+* Calculate staff salaries automatically
+* Calculate hospital fees for patients
+* Generate statistical reports
+* Store data permanently using SQLite
 
 ---
 
-## Hospital Fee Calculation
-
-The system automatically calculates hospital fees:
-
-Hospital Fee = (Treatment Days × Daily Fee) + Medicine Fee
-
----
-
-# 3. Object-Oriented Programming (OOP)
-
-This project implements all four pillars of Object-Oriented Programming.
+# 3. OOP Concepts Applied
 
 ## 3.1 Encapsulation
 
-Sensitive attributes are declared as private attributes using double underscores (__attribute).
+Private attributes are used to protect data inside classes.
 
-Examples:
+Example:
 
-* Staff name
-* Staff age
-* Base salary
-* Patient information
+```python
+self.__name
+self.__age
+self.__base_salary
+```
 
-Data is accessed through properties and class methods.
+Access to these attributes is provided through property methods.
 
 ---
 
 ## 3.2 Inheritance
 
-The Staff class serves as a parent class.
+The system applies inheritance through the Staff hierarchy.
 
-Child classes:
+```text
+Staff
+├── Doctor
+├── Nurse
+└── AdminStaff
+```
 
-* Doctor
-* Nurse
-* AdminStaff
-
-These subclasses inherit common properties and behaviors from the Staff class.
-
----
-
-## 3.3 Polymorphism
-
-Each child class overrides the salary calculation behavior.
-
-Examples:
-
-* Doctor calculates salary using bonus.
-* Nurse calculates salary using overtime payment.
-* AdminStaff calculates salary using allowance.
-
-The same method name is used with different implementations.
+All subclasses inherit common attributes and behaviors from the Staff class.
 
 ---
 
-## 3.4 Abstraction
+## 3.3 Abstraction
 
-The Staff class is implemented as an Abstract Base Class (ABC).
+The Staff class is implemented as an abstract class.
+
+```python
+class Staff(ABC):
+```
 
 Abstract methods:
 
-* calculate_salary()
-* get_role()
+```python
+calculate_salary()
+get_role()
+```
 
-Child classes must implement these methods.
-
----
-
-# 4. Layered Architecture
-
-The project follows a three-layer architecture.
-
-## models/
-
-Contains data models and OOP class definitions.
-
-Files:
-
-* staff.py
-* patient.py
+must be implemented by all subclasses.
 
 ---
 
-## services/
+## 3.4 Polymorphism
 
-Contains business logic and database operations.
+Each staff type calculates salary differently.
 
-Files:
+```python
+Doctor.calculate_salary()
 
-* database.py
-* staff_service.py
-* patient_service.py
+Nurse.calculate_salary()
+
+AdminStaff.calculate_salary()
+```
+
+The system can call:
+
+```python
+staff.calculate_salary()
+```
+
+without knowing the exact subclass type.
 
 ---
 
-## views/
+# 4. Technologies Used
 
-Contains the Command Line Interface (CLI).
-
-Files:
-
-* menu.py
+| Component    | Purpose                   |
+| ------------ | ------------------------- |
+| Python 3     | Main programming language |
+| SQLite       | Data storage              |
+| OOP          | Software design           |
+| CLI          | User interaction          |
+| CSV          | Report export             |
+| Git & GitHub | Version control           |
 
 ---
 
 # 5. Project Structure
 
 ```text
-Hospital_Management/
+Hospital-Management-System
 │
-├── models/
-│   ├── __init__.py
-│   ├── staff.py
-│   └── patient.py
+├── Models
+│   ├── patient.py
+│   └── staff.py
 │
-├── services/
-│   ├── __init__.py
+├── Services
 │   ├── database.py
+│   ├── patient_service.py
 │   ├── staff_service.py
-│   └── patient_service.py
+│   └── report_service.py
 │
-├── views/
-│   ├── __init__.py
+├── Views
 │   └── menu.py
 │
-├── main.py
 ├── hospital.db
-├── README.md
-└── .gitignore
+├── main.py
+└── README.md
 ```
-
-# 6. Database Design
-
-The application uses SQLite for permanent data storage.
-
-## Staff Table
-
-Fields:
-
-* id
-* name
-* age
-* role
-* base_salary
-* extra_value
-
-## Patients Table
-
-Fields:
-
-* id
-* name
-* age
-* disease
-* treatment_days
-* daily_fee
-* medicine_fee
-
-Data is automatically saved in the SQLite database and remains available after restarting the application.
 
 ---
 
-# 7. Search and Sort
+# 6. Main Features
 
-## Search
+## 6.1 Staff Management
 
-Staff:
+The system allows users to:
+
+* Add staff
+* View staff list
+* Update staff information
+* Delete staff
+* Search staff
+* Sort staff by salary
+
+---
+
+## 6.2 Patient Management
+
+The system allows users to:
+
+* Add patient
+* View patient list
+* Update patient information
+* Delete patient
+* Search patient
+* Sort patients by hospital fee
+
+---
+
+## 6.3 Salary Calculation
+
+Doctor salary:
+
+```python
+salary = base_salary + bonus
+```
+
+Nurse salary:
+
+```python
+salary = base_salary + overtime_pay
+```
+
+Admin Staff salary:
+
+```python
+salary = base_salary + allowance
+```
+
+---
+
+## 6.4 Hospital Fee Calculation
+
+Hospital fee is calculated using:
+
+```python
+hospital_fee =
+(treatment_days * daily_fee)
++ medicine_fee
+```
+
+---
+
+## 6.5 Search Features
+
+Staff Search:
 
 * Search by name
 * Search by role
 
-Patients:
+Patient Search:
 
 * Search by name
 * Search by disease
 
-## Sort
+---
+
+## 6.6 Sorting Features
 
 Staff:
 
@@ -266,96 +232,196 @@ Staff:
 
 Patients:
 
-* Sort by hospital fee (descending)
+* Sort by total hospital fee (descending)
 
 ---
 
-# 8. Exception Handling
+## 6.7 Reports & Statistics
 
-The system uses try-except blocks to handle invalid user input.
+The reporting module provides:
 
-Examples:
-
-* Non-numeric values entered for age
-* Invalid salary values
-* Invalid fee values
-
-This prevents the application from crashing unexpectedly.
+* Total Staff
+* Total Patients
+* Total Salary Expense
+* Total Hospital Revenue
 
 ---
 
-# 9. Technologies Used
+## 6.8 Export CSV Report
 
-* Python 3
-* SQLite
-* Object-Oriented Programming (OOP)
-* Git
-* GitHub
-* Visual Studio Code
+The system can generate:
+
+```text
+hospital_report.csv
+```
+
+The exported report contains:
+
+* Total Staff
+* Total Patients
+* Total Salary Expense
+* Total Hospital Revenue
 
 ---
 
-# 10. How to Run the Program
+## 6.9 Exception Handling
 
-## Step 1
+The application validates:
 
-Open the project folder in Visual Studio Code.
+* Integer input
+* Float input
+* Negative values
+* Invalid menu selections
+* Invalid staff roles
 
-## Step 2
+This helps prevent invalid data from being stored in the database.
 
-Open Terminal.
+---
 
-## Step 3
+# 7. Database Design
 
-Run the following command:
+## Staff Table
+
+| Field       | Type    |
+| ----------- | ------- |
+| id          | INTEGER |
+| name        | TEXT    |
+| age         | INTEGER |
+| role        | TEXT    |
+| base_salary | REAL    |
+| extra_value | REAL    |
+
+---
+
+## Patients Table
+
+| Field          | Type    |
+| -------------- | ------- |
+| id             | INTEGER |
+| name           | TEXT    |
+| age            | INTEGER |
+| disease        | TEXT    |
+| treatment_days | INTEGER |
+| daily_fee      | REAL    |
+| medicine_fee   | REAL    |
+
+---
+
+# 8. System Menu
+
+Main Menu:
+
+```text
+HOSPITAL / CLINIC MANAGEMENT SYSTEM
+
+1. Staff Management
+2. Patient Management
+3. Reports
+0. Exit
+```
+
+---
+
+Staff Menu:
+
+```text
+1. Add staff
+2. View staff list
+3. Update staff
+4. Delete staff
+5. Search staff
+6. Sort staff by salary
+0. Back
+```
+
+---
+
+Patient Menu:
+
+```text
+1. Add patient
+2. View patient list
+3. Update patient
+4. Delete patient
+5. Search patient
+6. Sort patients by hospital fee
+0. Back
+```
+
+---
+
+Reports Menu:
+
+```text
+1. Total Staff
+2. Total Patients
+3. Total Salary Expense
+4. Total Hospital Revenue
+5. Export Report CSV
+0. Back
+```
+
+---
+
+# 9. How To Run
+
+Step 1:
+
+```bash
+git clone https://github.com/zitcon/Hospital-management-system.git
+```
+
+Step 2:
+
+```bash
+cd Hospital-management-system
+```
+
+Step 3:
 
 ```bash
 python main.py
 ```
 
-## Step 4
+---
 
-Use the menu options to manage staff and patients.
+# 10. Git Workflow
+
+The project follows a structured Git workflow:
+
+1. Create repository
+2. Develop features
+3. Commit changes
+4. Push to GitHub
+5. Update documentation
+6. Final project submission
 
 ---
 
-# 11. Git & GitHub
+# 11. Self Assessment
 
-The project uses Git for version control and GitHub for source code management.
-
-Logical commits are created throughout the development process, including:
-
-* Project structure creation
-* SQLite implementation
-* OOP model implementation
-* CRUD operations
-* CLI interface development
-* Formatting improvements
-* Documentation updates
-
----
-
-# 12. Future Improvements
-
-Possible future enhancements:
-
-* Graphical User Interface (GUI)
-* Statistical reports
-* Export reports to CSV/PDF
-* User authentication system
-* Appointment scheduling
-* Doctor-patient assignment management
+| Criteria             | Status    |
+| -------------------- | --------- |
+| Encapsulation        | Completed |
+| Inheritance          | Completed |
+| Abstraction          | Completed |
+| Polymorphism         | Completed |
+| Layered Architecture | Completed |
+| CRUD Operations      | Completed |
+| Search Function      | Completed |
+| Sorting Function     | Completed |
+| SQLite Database      | Completed |
+| Exception Handling   | Completed |
+| Reports & Statistics | Completed |
+| CSV Export           | Completed |
+| GitHub Repository    | Completed |
 
 ---
 
-# 13. Conclusion
+# 12. Author
 
-This project successfully demonstrates the use of Object-Oriented Programming principles, Layered Architecture, SQLite database management, CRUD operations, searching, sorting, exception handling, and Git/GitHub workflow.
+Student: Nguyễn Võ Yên Khanh
 
-The system provides a practical solution for managing hospital staff and patients while fulfilling the academic requirements of the course.
+Course: Programming Methods
 
----
-
-**Author:** Nguyễn Võ Yên Khanh
-
-**Faculty of Informatics – Hue University of Education**
+Project: Hospital / Clinic Management System
