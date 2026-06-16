@@ -1,8 +1,10 @@
-from services.staff_service import StaffService
-from services.patient_service import PatientService
+from Services.staff_service import StaffService
+from Services.patient_service import PatientService
+from Services.report_service import ReportService
 
 staff_service = StaffService()
 patient_service = PatientService()
+report_service = ReportService()
 
 
 def input_int(message):
@@ -27,6 +29,16 @@ def input_float(message):
                 return value
         except ValueError:
             print("Please enter a valid number.")
+
+
+def input_role(message):
+    valid_roles = ["Doctor", "Nurse", "AdminStaff"]
+
+    while True:
+        role = input(message)
+        if role in valid_roles:
+            return role
+        print("Invalid role. Please enter Doctor, Nurse, or AdminStaff.")
 
 
 def display_staff(staff_list):
@@ -105,7 +117,7 @@ def staff_menu():
         if choice == "1":
             name = input("Name: ")
             age = input_int("Age: ")
-            role = input("Role Doctor/Nurse/AdminStaff: ")
+            role = input_role("Role Doctor/Nurse/AdminStaff: ")
             base_salary = input_float("Base salary: ")
             extra_value = input_float("Bonus/Overtime/Allowance: ")
 
@@ -119,7 +131,7 @@ def staff_menu():
             staff_id = input_int("Enter staff ID: ")
             name = input("New name: ")
             age = input_int("New age: ")
-            role = input("New role Doctor/Nurse/AdminStaff: ")
+            role = input_role("New role Doctor/Nurse/AdminStaff: ")
             base_salary = input_float("New base salary: ")
             extra_value = input_float("New bonus/overtime/allowance: ")
 
@@ -205,21 +217,69 @@ def patient_menu():
             print("Invalid choice.")
 
 
+def report_menu():
+    while True:
+        print("\n===== REPORTS =====")
+        print("1. Total Staff")
+        print("2. Total Patients")
+        print("3. Total Salary Expense")
+        print("4. Total Hospital Revenue")
+        print("5. Export Report CSV")
+        print("0. Back")
+
+        choice = input("Choose: ")
+
+        if choice == "1":
+            print("Total Staff:", report_service.total_staff())
+
+        elif choice == "2":
+            print("Total Patients:", report_service.total_patients())
+
+        elif choice == "3":
+            print(
+                "Total Salary Expense:",
+                f"{report_service.total_salary_expense():,.0f}"
+            )
+
+        elif choice == "4":
+            print(
+                "Total Hospital Revenue:",
+                f"{report_service.total_hospital_revenue():,.0f}"
+            )
+
+        elif choice == "5":
+            file_name = report_service.export_report_csv()
+            print(f"Report exported successfully: {file_name}")
+
+        elif choice == "0":
+            break
+
+        else:
+            print("Invalid choice.")
+
+
 def main_menu():
     while True:
         print("\n========== HOSPITAL / CLINIC MANAGEMENT SYSTEM ==========")
         print("1. Staff Management")
         print("2. Patient Management")
+        print("3. Reports")
         print("0. Exit")
 
         choice = input("Choose: ")
 
         if choice == "1":
             staff_menu()
+
         elif choice == "2":
             patient_menu()
+
+        elif choice == "3":
+            report_menu()
+
         elif choice == "0":
             print("Program ended.")
             break
+
         else:
             print("Invalid choice.")

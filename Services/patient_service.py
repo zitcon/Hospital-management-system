@@ -1,7 +1,11 @@
-from services.database import get_connection
+from Models.patient import Patient
+from Services.database import get_connection
 
 
 class PatientService:
+    def create_patient_object(self, name, age, disease, treatment_days, daily_fee, medicine_fee):
+        return Patient(name, age, disease, treatment_days, daily_fee, medicine_fee)
+
     def add_patient(self, name, age, disease, treatment_days, daily_fee, medicine_fee):
         conn = get_connection()
         cursor = conn.cursor()
@@ -19,13 +23,25 @@ class PatientService:
         cursor = conn.cursor()
 
         cursor.execute("""
-        SELECT id, name, age, disease, treatment_days, daily_fee, medicine_fee,
-        treatment_days * daily_fee + medicine_fee AS total_fee
+        SELECT id, name, age, disease, treatment_days, daily_fee, medicine_fee
         FROM patients
         """)
 
-        result = cursor.fetchall()
+        rows = cursor.fetchall()
         conn.close()
+
+        result = []
+        for row in rows:
+            patient_id, name, age, disease, treatment_days, daily_fee, medicine_fee = row
+            patient = self.create_patient_object(
+                name, age, disease, treatment_days, daily_fee, medicine_fee
+            )
+            total_fee = patient.calculate_hospital_fee()
+            result.append((
+                patient_id, name, age, disease,
+                treatment_days, daily_fee, medicine_fee, total_fee
+            ))
+
         return result
 
     def update_patient(self, patient_id, name, age, disease, treatment_days, daily_fee, medicine_fee):
@@ -55,27 +71,28 @@ class PatientService:
         cursor = conn.cursor()
 
         cursor.execute("""
-        SELECT id, name, age, disease, treatment_days, daily_fee, medicine_fee,
-        treatment_days * daily_fee + medicine_fee AS total_fee
+        SELECT id, name, age, disease, treatment_days, daily_fee, medicine_fee
         FROM patients
         WHERE name LIKE ? OR disease LIKE ?
         """, (f"%{keyword}%", f"%{keyword}%"))
 
-        result = cursor.fetchall()
+        rows = cursor.fetchall()
         conn.close()
+
+        result = []
+        for row in rows:
+            patient_id, name, age, disease, treatment_days, daily_fee, medicine_fee = row
+            patient = self.create_patient_object(
+                name, age, disease, treatment_days, daily_fee, medicine_fee
+            )
+            total_fee = patient.calculate_hospital_fee()
+            result.append((
+                patient_id, name, age, disease,
+                treatment_days, daily_fee, medicine_fee, total_fee
+            ))
+
         return result
 
     def sort_patients_by_fee(self):
-        conn = get_connection()
-        cursor = conn.cursor()
-
-        cursor.execute("""
-        SELECT id, name, age, disease, treatment_days, daily_fee, medicine_fee,
-        treatment_days * daily_fee + medicine_fee AS total_fee
-        FROM patients
-        ORDER BY total_fee DESC
-        """)
-
-        result = cursor.fetchall()
-        conn.close()
-        return result
+        patient_list = self.get_all_patients()
+        return sorted(patient_list, key=lambda x: x[7], reverse=True)

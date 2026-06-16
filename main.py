@@ -1,5 +1,5 @@
-from services.database import create_tables
-from views.menu import main_menu
+from Services.database import create_tables
+from Views.menu import main_menu
 
 
 def main():

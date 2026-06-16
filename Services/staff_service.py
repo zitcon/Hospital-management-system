@@ -1,7 +1,18 @@
-from services.database import get_connection
+from Models.staff import Doctor, Nurse, AdminStaff
+from Services.database import get_connection
 
 
 class StaffService:
+    def create_staff_object(self, name, age, role, base_salary, extra_value):
+        if role == "Doctor":
+            return Doctor(name, age, base_salary, extra_value)
+        elif role == "Nurse":
+            return Nurse(name, age, base_salary, extra_value)
+        elif role == "AdminStaff":
+            return AdminStaff(name, age, base_salary, extra_value)
+        else:
+            raise ValueError("Invalid staff role")
+
     def add_staff(self, name, age, role, base_salary, extra_value):
         conn = get_connection()
         cursor = conn.cursor()
@@ -19,13 +30,20 @@ class StaffService:
         cursor = conn.cursor()
 
         cursor.execute("""
-        SELECT id, name, age, role, base_salary, extra_value,
-        base_salary + extra_value AS total_salary
+        SELECT id, name, age, role, base_salary, extra_value
         FROM staff
         """)
 
-        result = cursor.fetchall()
+        rows = cursor.fetchall()
         conn.close()
+
+        result = []
+        for row in rows:
+            staff_id, name, age, role, base_salary, extra_value = row
+            staff = self.create_staff_object(name, age, role, base_salary, extra_value)
+            total_salary = staff.calculate_salary()
+            result.append((staff_id, name, age, role, base_salary, extra_value, total_salary))
+
         return result
 
     def update_staff(self, staff_id, name, age, role, base_salary, extra_value):
@@ -55,27 +73,23 @@ class StaffService:
         cursor = conn.cursor()
 
         cursor.execute("""
-        SELECT id, name, age, role, base_salary, extra_value,
-        base_salary + extra_value AS total_salary
+        SELECT id, name, age, role, base_salary, extra_value
         FROM staff
         WHERE name LIKE ? OR role LIKE ?
         """, (f"%{keyword}%", f"%{keyword}%"))
 
-        result = cursor.fetchall()
+        rows = cursor.fetchall()
         conn.close()
+
+        result = []
+        for row in rows:
+            staff_id, name, age, role, base_salary, extra_value = row
+            staff = self.create_staff_object(name, age, role, base_salary, extra_value)
+            total_salary = staff.calculate_salary()
+            result.append((staff_id, name, age, role, base_salary, extra_value, total_salary))
+
         return result
 
     def sort_staff_by_salary(self):
-        conn = get_connection()
-        cursor = conn.cursor()
-
-        cursor.execute("""
-        SELECT id, name, age, role, base_salary, extra_value,
-        base_salary + extra_value AS total_salary
-        FROM staff
-        ORDER BY total_salary DESC
-        """)
-
-        result = cursor.fetchall()
-        conn.close()
-        return result
+        staff_list = self.get_all_staff()
+        return sorted(staff_list, key=lambda x: x[6], reverse=True)
